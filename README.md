@@ -42,6 +42,7 @@ Quando você baixa este repositório, os arquivos de dependência do React não 
 4. **Acesse no navegador:** O terminal exibirá um link local (geralmente http://localhost:5173/). Segure Ctrl (ou Cmd no Mac) e clique no link para abrir o sistema.
 
 5. **Estrutura principal da pasta:**
+```
 src/
 ├── components/
 │   ├── NavBar/         # Componente de navegação superior
@@ -54,3 +55,4 @@ src/
 │   └── List.jsx        # Página que exibe a lista e o campo de busca
 ├── App.jsx             # Gerenciamento de rotas e estado global (Fonte da Verdade)
 └── index.css           # Estilização global
+```
