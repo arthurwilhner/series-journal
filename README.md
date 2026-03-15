@@ -15,8 +15,11 @@ O sistema consiste em um CRUD (Create, Read, Update, Delete) que permite ao usu�
 
 ## 📸 Demonstração do Projeto
 
+Após executar o projeto, as telas ficarão assim:
+
 ![Demonstração das páginas](src\Show.gif) 
 ![Funcionamento do Cadastro](src\Cadastro.gif)
+
 
 
 ## 🚀 Tecnologias e Ferramentas Utilizadas
