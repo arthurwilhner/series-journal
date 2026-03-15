@@ -59,7 +59,7 @@ Para executar o projeto localmente:
 2. **Instale as dependências** executando o comando:
 
 ```
-npm install
+    npm install
 ```
 
 3. **Rode o comando:**
