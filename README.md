@@ -18,6 +18,9 @@ O sistema consiste em um CRUD (Create, Read, Update, Delete) que permite ao usu�
 Após executar o projeto, as telas ficarão assim:
 
 ![Demonstração das páginas](./src/Show.gif) 
+
+Exemplo de funcionamento do cadastro de séries:
+
 ![Funcionamento do Cadastro](./src/Cadastro.gif)
 
 
