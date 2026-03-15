@@ -13,6 +13,12 @@ O sistema consiste em um CRUD (Create, Read, Update, Delete) que permite ao usu�
 * **Busca em Tempo Real:** Filtro textual que atualiza a lista de séries exibidas conforme o usuário digita o título.
 * **Navegação SPA:** Transição fluida entre as páginas de Cadastro, Lista, Sobre e Home, sem recarregamento do navegador.
 
+## 📸 Demonstração do Projeto
+
+![Demonstração das páginas](src\Show.gif) 
+![Funcionamento do Cadastro](src\Cadastro.gif)
+
+
 ## 🚀 Tecnologias e Ferramentas Utilizadas
 
 * **React:** Biblioteca JavaScript para construção da interface de usuário.
@@ -20,26 +26,40 @@ O sistema consiste em um CRUD (Create, Read, Update, Delete) que permite ao usu�
 * **React Router DOM:** Gerenciamento de rotas para a navegação SPA.
 * **CSS Flexbox:** Estilização global focada em alinhamento centralizado e responsividade básica.
 
-## ⚙️ Pré-requisitos
+## 🧩 Descrição dos Componentes e Estrutura
 
-Certifique-se de ter o [Node.js](https://nodejs.org/) instalado em sua máquina para gerenciar os pacotes e rodar o servidor local.
+A aplicação foi dividida em componentes modulares para facilitar a manutenção e o reaproveitamento de código:
 
-## 🛠️ Como executar o projeto localmente
+* **`App.jsx`**: Atua como a "Fonte da Verdade" do projeto. Gerencia as rotas da aplicação e mantém o estado global da lista de séries, passando os dados e funções via *props* para os componentes filhos.
+* **`NavBar`**: Componente de navegação superior fixo. Utiliza os links do React Router DOM para permitir a transição entre as páginas sem recarregar o navegador.
+* **`SerieForm`**: Componente responsável por renderizar o formulário de cadastro. Gerencia seu próprio estado local para os inputs e realiza a validação dos dados antes de enviar a nova série para o estado global.
+* **`SerieList`**: Recebe a lista de séries e o termo de busca para renderizar a tabela ou grade de séries. 
+* **`SerieItem`**: Representa uma linha/item individual dentro da lista. Ele encapsula a lógica de exibição dos dados da série e também os inputs para a **edição in-line**, além de emitir as ações de exclusão e salvamento.
+* **Pages (`Home`, `About`, `Cadastro`, `List`)**: Componentes de contêiner que agrupam a lógica e os componentes específicos de cada rota da aplicação.
 
-Quando você baixa este repositório, os arquivos de dependência do React não vêm inclusos. Siga os passos abaixo para baixar as dependências e iniciar a aplicação:
+## 🧠 Decisões de Desenvolvimento
 
-1. **Abra o terminal** e navegue até a pasta raiz do projeto (`series-journal`).
+* **Estado Centralizado no App.jsx:** Como o escopo da Fase 1 é focado em fundamentos, optei por centralizar o estado das séries no componente raiz (`App.jsx`) e passá-lo via *props* (Prop Drilling). Isso evitou a complexidade prematura de ferramentas como Redux ou Context API.
+* **Edição In-line:** Para melhorar a experiência do usuário (UX), a edição das séries foi implementada diretamente no componente `SerieItem`. Isso elimina a necessidade de criar uma página separada apenas para edição, tornando o fluxo mais rápido e moderno.
+* **CSS e Flexbox:** A estilização foi feita com CSS puro focado em Flexbox, garantindo um layout limpo, alinhamento consistente e uma base sólida para futuras implementações de responsividade avançada.
+
+## ⚙️ Pré-requisitos e Execução
+
+Certifique-se de ter o [Node.js](https://nodejs.org/) instalado em sua máquina. 
+
+Para executar o projeto localmente:
+
+1. **Abra o terminal** e navegue até a pasta raiz do projeto.
 2. **Instale as dependências** executando o comando:
-```
+   ```bash
    npm install
-```
 
 3. **Rode o comando:**
 ```
     npm run dev
 ```
 
-4. **Acesse no navegador:** O terminal exibirá um link local (geralmente http://localhost:5173/). Segure Ctrl (ou Cmd no Mac) e clique no link para abrir o sistema.
+4. **Acesse no navegador:** O terminal exibirá um link local. Segure Ctrl (ou Cmd no Mac) e clique no link para abrir o sistema.
 
 5. **Estrutura principal da pasta:**
 ```
