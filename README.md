@@ -58,8 +58,9 @@ Para executar o projeto localmente:
 1. **Abra o terminal** e navegue até a pasta raiz do projeto.
 2. **Instale as dependências** executando o comando:
 
-   ```bash
-   npm install
+```
+npm install
+```
 
 3. **Rode o comando:**
 
