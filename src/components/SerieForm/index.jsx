@@ -9,14 +9,14 @@ function SerieForm() {
         diretor: '', produtora: '', categoria: '', dataAssistido: ''
     });
     
-    // Estado para guardar as mensagens de erro
+    
     const [erros, setErros] = useState({});
 
     const handleChanges = (evento) => {
         const { name, value } = evento.target;
         setFormData({ ...formData, [name]: value });
         
-        // Limpa o erro do campo assim que o usuário começa a digitar novamente
+        
         if (erros[name]) {
             setErros({ ...erros, [name]: null });
         }
@@ -27,7 +27,7 @@ function SerieForm() {
         
         const novosErros = {};
 
-        // 1. Validação dos campos preenchidos
+        
         if(!formData.titulo) novosErros.titulo = 'O título é obrigatório';
         if(!formData.numeroTemporadas) novosErros.numeroTemporadas = 'Obrigatório';
         if(!formData.dataLancamento) novosErros.dataLancamento = 'Obrigatório';
@@ -36,13 +36,13 @@ function SerieForm() {
         if(!formData.categoria) novosErros.categoria = 'Obrigatória';
         if(!formData.dataAssistido) novosErros.dataAssistido = 'Obrigatório';
 
-        // 2. Se houver algum erro, atualiza o estado e não envia para a API
+        
         if(Object.keys(novosErros).length > 0){
             setErros(novosErros);
             return;
         }
 
-        // 3. Se passou pela validação, tenta salvar
+        
         try {
             await api.post('/series', formData);
             alert("Série salva com sucesso!");
@@ -61,7 +61,6 @@ function SerieForm() {
                     <div className="col-12">
                         <label className="form-label">Título</label>
                         <input type="text" className={`form-control ${erros.titulo ? 'is-invalid' : ''}`} name="titulo" value={formData.titulo} onChange={handleChanges}/>
-                        {/* Exibe a mensagem de erro em vermelho abaixo do campo */}
                         {erros.titulo && <div className="invalid-feedback">{erros.titulo}</div>}
                     </div>
 
