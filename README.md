@@ -16,8 +16,8 @@ O sistema evoluiu de uma gestão de estado local para uma aplicação robusta qu
 ## 📸 Demonstração do Projeto
 
 
-![Demonstração das páginas](./src/Show.gif) 
-![Funcionamento do Cadastro](./src/Cadastro.gif)
+![Demonstração das páginas](./src/Show2.gif) 
+![Funcionamento do Cadastro](./src/Cadastro2.gif)
 
 ## 🚀 Tecnologias e Ferramentas Utilizadas
 
