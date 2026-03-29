@@ -62,7 +62,6 @@ Abra um **novo terminal** na pasta raiz deste projeto React e execute:
 ### 3. Rodando os Testes Automatizados
 Com o terminal do front-end aberto, você pode validar a integridade do código rodando:
 * `npm run test` (Executa os testes unitários e de renderização).
-* `npm run coverage` (Gera o relatório de cobertura de código do Vitest).
 
 ### 📁 Estrutura Principal da Pasta
 ```text
