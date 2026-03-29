@@ -1,140 +1,114 @@
 import { useState } from "react";
+import api from "../../services/api"; 
+import { useNavigate } from "react-router-dom";
 
-
-// Função de Estado único para o formulário
-function SerieForm({ aoSalvar }){
+function SerieForm() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        titulo: '',
-        numeroTemporadas: '',
-        dataLancamento: '',
-        diretor: '',
-        produtora: '',
-        categoria: '',
-        dataAssistido: ''
+        titulo: '', numeroTemporadas: '', dataLancamento: '',
+        diretor: '', produtora: '', categoria: '', dataAssistido: ''
     });
-
-
-    // Estado para mensagens de erro
+    
+    // Estado para guardar as mensagens de erro
     const [erros, setErros] = useState({});
 
     const handleChanges = (evento) => {
-        const {name, value} = evento.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
+        const { name, value } = evento.target;
+        setFormData({ ...formData, [name]: value });
+        
+        // Limpa o erro do campo assim que o usuário começa a digitar novamente
+        if (erros[name]) {
+            setErros({ ...erros, [name]: null });
+        }
     };
 
-    const handleSubmit = (evento) => {
-        evento.preventDefault(); // Impede o reload da página
-
-        const novosErros = {};
+    const handleSubmit = async (evento) => {
+        evento.preventDefault();
         
-        // Validação dos campos preenchidos
-        if(!formData.titulo) novosErros.titulo = 'O título é obrigatório';
-        if(!formData.numeroTemporadas) novosErros.numeroTemporadas = 'O número de temporadas é obrigatório';
-        if(!formData.dataLancamento) novosErros.dataLancamento = 'A data de lançamento é obrigatória';
-        if(!formData.diretor) novosErros.diretor = 'O diretor é obrigatório';
-        if(!formData.produtora) novosErros.produtora = 'A produtora é obrigatória';
-        if(!formData.categoria) novosErros.categoria = 'A categoria é obrigatória';
-        if(!formData.dataAssistido) novosErros.dataAssistido = 'A data assistida é obrigatória';
+        const novosErros = {};
 
-        // Se houver erros, atualiza o estado e não prossegue
+        // 1. Validação dos campos preenchidos
+        if(!formData.titulo) novosErros.titulo = 'O título é obrigatório';
+        if(!formData.numeroTemporadas) novosErros.numeroTemporadas = 'Obrigatório';
+        if(!formData.dataLancamento) novosErros.dataLancamento = 'Obrigatório';
+        if(!formData.diretor) novosErros.diretor = 'Obrigatório';
+        if(!formData.produtora) novosErros.produtora = 'Obrigatório';
+        if(!formData.categoria) novosErros.categoria = 'Obrigatória';
+        if(!formData.dataAssistido) novosErros.dataAssistido = 'Obrigatório';
+
+        // 2. Se houver algum erro, atualiza o estado e não envia para a API
         if(Object.keys(novosErros).length > 0){
             setErros(novosErros);
             return;
         }
 
-        setErros({}); // Limpa os erros se a validação passar
-        const novaSerie = { ...formData, id: Date.now()};
-        aoSalvar(novaSerie);
-
-        setFormData({titulo: '', numeroTemporadas: '', dataLancamento: '', diretor: '', produtora: '', categoria: '', dataAssistido: ''})
+        // 3. Se passou pela validação, tenta salvar
+        try {
+            await api.post('/series', formData);
+            alert("Série salva com sucesso!");
+            navigate('/lista'); 
+        } catch (error) {
+            console.error("Erro ao salvar a série:", error);
+            alert("Erro ao conectar com a API.");
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit}> {/*Formulário para informações do gerenciador*/}
+        <div className="card shadow-lg border-0 mt-4 p-4">
+            <h2 className="card-title text-center text-primary mb-4 fw-bold">Cadastrar Nova Série</h2>
+            <form onSubmit={handleSubmit}>
+                <div className="row g-3">
+                    <div className="col-12">
+                        <label className="form-label">Título</label>
+                        <input type="text" className={`form-control ${erros.titulo ? 'is-invalid' : ''}`} name="titulo" value={formData.titulo} onChange={handleChanges}/>
+                        {/* Exibe a mensagem de erro em vermelho abaixo do campo */}
+                        {erros.titulo && <div className="invalid-feedback">{erros.titulo}</div>}
+                    </div>
 
-            <div>
-                <label>Título: </label> 
-                <input 
-                    type="text"
-                    name="titulo"
-                    value={formData.titulo}
-                    onChange={handleChanges}
-                />
-                {erros.titulo && <span style={{ color: 'red', display: 'block' }}>{erros.titulo}</span>}
-            </div>
+                    <div className="col-md-6">
+                        <label className="form-label">Número de Temporadas</label>
+                        <input type="number" className={`form-control ${erros.numeroTemporadas ? 'is-invalid' : ''}`} name="numeroTemporadas" value={formData.numeroTemporadas} onChange={handleChanges}/>
+                        {erros.numeroTemporadas && <div className="invalid-feedback">{erros.numeroTemporadas}</div>}
+                    </div>
 
-            <div>
-                <label>Número de temporadas: </label> 
-                <input 
-                    type="number"
-                    name="numeroTemporadas"
-                    value={formData.numeroTemporadas}
-                    onChange={handleChanges}
-                />
-                {erros.numeroTemporadas && <span style={{ color: 'red', display: 'block' }}>{erros.numeroTemporadas}</span>}
-            </div>
+                    <div className="col-md-6">
+                        <label className="form-label">Data de Lançamento</label>
+                        <input type="date" className={`form-control ${erros.dataLancamento ? 'is-invalid' : ''}`} name="dataLancamento" value={formData.dataLancamento} onChange={handleChanges}/>
+                        {erros.dataLancamento && <div className="invalid-feedback">{erros.dataLancamento}</div>}
+                    </div>
 
-            <div>
-                <label>Data de lançamento: </label> 
-                <input 
-                    type="date"
-                    name="dataLancamento"
-                    value={formData.dataLancamento}
-                    onChange={handleChanges}
-                />
-                {erros.dataLancamento && <span style={{ color: 'red', display: 'block' }}>{erros.dataLancamento}</span>}
-            </div>
+                    <div className="col-md-6">
+                        <label className="form-label">Diretor</label>
+                        <input type="text" className={`form-control ${erros.diretor ? 'is-invalid' : ''}`} name="diretor" value={formData.diretor} onChange={handleChanges}/>
+                        {erros.diretor && <div className="invalid-feedback">{erros.diretor}</div>}
+                    </div>
 
-            <div>
-                <label>Diretor: </label> 
-                <input 
-                    type="text"
-                    name="diretor"
-                    value={formData.diretor}
-                    onChange={handleChanges}
-                />
-                {erros.diretor && <span style={{ color: 'red', display: 'block' }}>{erros.diretor}</span>}
-            </div>
+                    <div className="col-md-6">
+                        <label className="form-label">Produtora</label>
+                        <input type="text" className={`form-control ${erros.produtora ? 'is-invalid' : ''}`} name="produtora" value={formData.produtora} onChange={handleChanges}/>
+                        {erros.produtora && <div className="invalid-feedback">{erros.produtora}</div>}
+                    </div>
 
-            <div>
-                <label>Produtora: </label> 
-                <input 
-                    type="text"
-                    name="produtora"
-                    value={formData.produtora}
-                    onChange={handleChanges}
-                />
-                {erros.produtora && <span style={{ color: 'red', display: 'block' }}>{erros.produtora}</span>}
-            </div>
+                    <div className="col-md-6">
+                        <label className="form-label">Categoria</label>
+                        <input type="text" className={`form-control ${erros.categoria ? 'is-invalid' : ''}`} name="categoria" value={formData.categoria} onChange={handleChanges}/>
+                        {erros.categoria && <div className="invalid-feedback">{erros.categoria}</div>}
+                    </div>
 
-            <div>
-                <label>Categoria: </label> 
-                <input 
-                    type="text"
-                    name="categoria"
-                    value={formData.categoria}
-                    onChange={handleChanges}
-                />
-                {erros.categoria && <span style={{ color: 'red', display: 'block' }}>{erros.categoria}</span>}
-            </div>
+                    <div className="col-md-6">
+                        <label className="form-label">Data Assistido</label>
+                        <input type="date" className={`form-control ${erros.dataAssistido ? 'is-invalid' : ''}`} name="dataAssistido" value={formData.dataAssistido} onChange={handleChanges}/>
+                        {erros.dataAssistido && <div className="invalid-feedback">{erros.dataAssistido}</div>}
+                    </div>
 
-            <div>
-                <label>Data em que foi assistida: </label> 
-                <input 
-                    type="date"
-                    name="dataAssistido"
-                    value={formData.dataAssistido}
-                    onChange={handleChanges}
-                />
-                {erros.dataAssistido && <span style={{ color: 'red', display: 'block' }}>{erros.dataAssistido}</span>}
-            </div>
-            <button type="submit">Salvar</button>
-        </form>
+                    <div className="col-12 mt-4 text-center d-flex gap-3 justify-content-center">
+                        <button type="submit" className="btn btn-primary btn-lg px-5">Confirmar</button>
+                        <button type="button" className="btn btn-outline-secondary btn-lg px-5" onClick={() => navigate('/lista')}>Cancelar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     );
-
 }
 
 export default SerieForm;

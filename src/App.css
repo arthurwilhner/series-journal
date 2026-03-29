@@ -1,23 +1,46 @@
 
+body {
+  background-color: #121212;
+  color: #e0e0e0;
+  margin: 0; 
+}
+
+.card, .list-group-item {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+  border-color: #333333 !important;
+}
+
+.form-control {
+  background-color: #2a2a2a !important;
+  color: #ffffff !important;
+  border-color: #444444 !important;
+}
+
+.form-control::placeholder {
+  color: #999999 !important;
+}
+
+.form-control:focus {
+  background-color: #333333 !important;
+  color: #ffffff !important;
+  border-color: #666666 !important;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1) !important;
+}
+
 #root {
-  display: flex;
-  flex-direction: column; 
-  align-items: center;    
-  margin: 0 auto;         
-  max-width: 800px;       
-  padding: 2rem;
   width: 100%;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+
 }
 
 
 #root > div {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding-bottom: 2rem;
 }
-
 
 h1, p {
   text-align: center;
@@ -25,20 +48,42 @@ h1, p {
 
 
 form, ul {
-  align-items: center;
   width: 100%;
-  max-width: 500px; 
-  display: flex;
-  flex-direction: column;
+  max-width: 800px; 
+  margin: 0 auto; 
   padding: 0;
-  button {
-    margin-top: 1rem;
-    max-width: 100px;
-    align-items: center;
-  }
+  display: block; 
 }
 
+form button, ul button {
+  margin-top: 1rem;
+}
 
 ul {
   list-style: none;
+}
+
+.navbar {
+  background-color: #1a1a1a !important; 
+  border-bottom: 1px solid #333333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  padding: 1rem 0;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #ffffff !important;
+  font-size: 1.5rem;
+}
+
+.nav-link {
+  color: #aaaaaa !important;
+  font-weight: 500;
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+.nav-link:hover, .nav-link:focus {
+  color: #ffffff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
 }

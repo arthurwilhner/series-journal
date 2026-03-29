@@ -1,87 +1,88 @@
-# 📺 Series Journal (Gerenciador de Séries)
+# 📺 Series Journal (Gerenciador de Séries) - Fase 02
 
-Este é um projeto de gerenciamento de séries desenvolvido como parte da Fase 01 da disciplina de Desenvolvimento Front-End do curso de Análise e Desenvolvimento de Sistemas da PUCRS.
+Este é um projeto de gerenciamento de séries desenvolvido como parte da **Fase 02** da disciplina de Desenvolvimento Front-End do curso de Análise e Desenvolvimento de Sistemas da PUCRS.
 
-O sistema consiste em um CRUD (Create, Read, Update, Delete) que permite ao usuário cadastrar, visualizar, editar e excluir suas séries assistidas de forma rápida e intuitiva, operando como uma Single Page Application (SPA).
+O sistema evoluiu de uma gestão de estado local para uma aplicação robusta que consome uma **API REST** externa, integrando comunicação HTTP assíncrona, busca automática de imagens em APIs públicas, testes automatizados e uma interface totalmente reformulada com Bootstrap.
 
 ## ✨ Funcionalidades
 
-* **Cadastro de Séries:** Inserção de novas séries com validação de campos obrigatórios.
-* **Listagem:** Visualização de todas as séries cadastradas com seus respectivos detalhes (Título, Temporadas, Lançamento, Diretor, Produtora, Categoria e Data Assistido).
-* **Edição In-line:** Edição rápida e prática diretamente na linha da série, sem a necessidade de navegar para outra tela.
-* **Exclusão:** Remoção de séries da lista com atualização instantânea.
-* **Busca em Tempo Real:** Filtro textual que atualiza a lista de séries exibidas conforme o usuário digita o título.
-* **Navegação SPA:** Transição fluida entre as páginas de Cadastro, Lista, Sobre e Home, sem recarregamento do navegador.
+* **Integração REST API:** Todo o fluxo de CRUD (Create, Read, Update, Delete) agora é persistido e consumido de um back-end real fornecido pela disciplina.
+* **Capa Automática (Integração OMDb API):** Ao renderizar a lista, o sistema busca automaticamente os posteres oficiais das séries baseando-se no título cadastrado, utilizando a OMDb API.
+* **Testes Automatizados:** Suíte de testes unitários e de renderização implementada para garantir a confiabilidade dos componentes e das páginas.
+* **Interface Responsiva (Dark Mode):** Migração do CSS puro para o ecossistema do Bootstrap, com a criação de um tema escuro customizado (Dark Mode Cinematográfico) para valorizar os posteres.
+* **Navegação SPA:** Transição fluida entre as páginas de Cadastro, Lista, Sobre e Home via React Router DOM.
+* **Edição In-line:** Edição rápida e prática diretamente na linha da série.
 
 ## 📸 Demonstração do Projeto
 
-Após executar o projeto, as telas ficarão assim:
 
 ![Demonstração das páginas](./src/Show.gif) 
-
-Exemplo de funcionamento do cadastro de séries:
-
 ![Funcionamento do Cadastro](./src/Cadastro.gif)
-
-
 
 ## 🚀 Tecnologias e Ferramentas Utilizadas
 
-* **React:** Biblioteca JavaScript para construção da interface de usuário.
-* **Vite:** Ferramenta de build otimizada para um ambiente de desenvolvimento rápido.
-* **React Router DOM:** Gerenciamento de rotas para a navegação SPA.
-* **CSS Flexbox:** Estilização global focada em alinhamento centralizado e responsividade básica.
+* **React & Vite:** Ecossistema principal para construção da interface e build rápido.
+* **Axios:** Cliente HTTP baseado em Promises utilizado para realizar as requisições (GET, POST, PUT, DELETE) à API REST.
+* **Bootstrap:** Framework de CSS utilizado para componentização rápida (Cards, NavBars, Grid System) e responsividade.
+* **Vitest & React Testing Library:** Framework de testes unitários moderno e ágil, configurado com JSDOM para simular o navegador.
+* **OMDb API:** API externa pública utilizada para a busca automatizada das capas das séries.
 
 ## 🧩 Descrição dos Componentes e Estrutura
 
-A aplicação foi dividida em componentes modulares para facilitar a manutenção e o reaproveitamento de código:
+A arquitetura foi refatorada para descentralizar o estado e focar no consumo de dados via rede:
 
-* **`App.jsx`**: Atua como a "Fonte da Verdade" do projeto. Gerencia as rotas da aplicação e mantém o estado global da lista de séries, passando os dados e funções via *props* para os componentes filhos.
-* **`NavBar`**: Componente de navegação superior fixo. Utiliza os links do React Router DOM para permitir a transição entre as páginas sem recarregar o navegador.
-* **`SerieForm`**: Componente responsável por renderizar o formulário de cadastro. Gerencia seu próprio estado local para os inputs e realiza a validação dos dados antes de enviar a nova série para o estado global.
-* **`SerieList`**: Recebe a lista de séries e o termo de busca para renderizar a tabela ou grade de séries. 
-* **`SerieItem`**: Representa uma linha/item individual dentro da lista. Ele encapsula a lógica de exibição dos dados da série e também os inputs para a **edição in-line**, além de emitir as ações de exclusão e salvamento.
-* **Pages (`Home`, `About`, `Cadastro`, `List`)**: Componentes de contêiner que agrupam a lógica e os componentes específicos de cada rota da aplicação.
+* **`services/api.js`**: Arquivo de configuração centralizada do Axios, definindo a URL base de comunicação com a API.
+* **`App.jsx`**: Focado exclusivamente no roteamento da aplicação (`Routes`). Deixou de ser a "Fonte da Verdade" dos dados, delegando essa responsabilidade aos componentes que consomem a API.
+* **`SerieForm`**: Componente de cadastro que valida os dados localmente e realiza o POST assíncrono para a API, redirecionando o usuário para a lista em caso de sucesso.
+* **`SerieList`**: Executa o `useEffect` para buscar a lista do back-end (GET) no momento da montagem e gerencia o filtro de busca em tempo real.
+* **`SerieItem`**: Renderiza a linha individual. Agora possui seu próprio ciclo de vida para buscar o poster na OMDb API e emite os comandos HTTP de atualização (PUT) e exclusão (DELETE).
+* **`*.test.jsx`**: Arquivos isolados que contêm os testes de renderização e comportamento de cada componente, utilizando *mocks* para simular chamadas de rede.
 
-## 🧠 Decisões de Desenvolvimento
+## 🧠 Decisões de Desenvolvimento (Fase 02)
 
-* **Estado Centralizado no App.jsx:** Como o escopo da Fase 1 é focado em fundamentos, optei por centralizar o estado das séries no componente raiz (`App.jsx`) e passá-lo via *props* (Prop Drilling). Isso evitou a complexidade prematura de ferramentas como Redux ou Context API.
-* **Edição In-line:** Para melhorar a experiência do usuário (UX), a edição das séries foi implementada diretamente no componente `SerieItem`. Isso elimina a necessidade de criar uma página separada apenas para edição, tornando o fluxo mais rápido e moderno.
-* **CSS e Flexbox:** A estilização foi feita com CSS puro focado em Flexbox, garantindo um layout limpo, alinhamento consistente e uma base sólida para futuras implementações de responsividade avançada.
+* **Proxy no Vite (CORS):** Para contornar o erro de CORS ao tentar comunicar o front-end (porta 5173) diretamente com a API local da faculdade (porta 5000), foi configurado um Proxy no `vite.config.js`, permitindo requisições fluidas e seguras.
+* **Mocking em Testes:** Nos testes automatizados, o Axios foi "mockado" (simulado). Isso garante que os testes rodem rapidamente e não dependam de conectividade com a internet ou com a API rodando, focando apenas na lógica dos componentes React.
+* **Fallback de Imagens:** Caso a OMDb API não encontre a série cadastrada ou a requisição falhe, o `SerieItem` está programado para renderizar uma imagem de *placeholder* genérica, evitando a quebra visual do layout.
 
 ## ⚙️ Pré-requisitos e Execução
 
-Certifique-se de ter o [Node.js](https://nodejs.org/) instalado em sua máquina. 
+Para rodar este projeto, você precisará executar dois servidores simultaneamente (O back-end fornecido pela PUCRS e este projeto front-end). Certifique-se de ter o Node.js instalado.
 
-Para executar o projeto localmente:
+### 1. Executando a API (Back-end)
+1. Clone o repositório da disciplina (`adsPucrsOnline/DesenvolvimentoFrontend/`).
+2. Navegue até a pasta da API: `cd ./DesenvolvimentoFrontend/serieJournal-api/`
+3. Instale as dependências: `npm install`
+4. Inicie o servidor: `npm start` *(A API rodará na porta 5000)*.
 
-1. **Abra o terminal** e navegue até a pasta raiz do projeto.
-2. **Instale as dependências** executando o comando:
+### 2. Executando o Front-end (Este projeto)
+Abra um **novo terminal** na pasta raiz deste projeto React e execute:
+1. `npm install` (Para instalar todas as dependências, incluindo Axios e Bootstrap).
+2. `npm run dev` (Para iniciar a aplicação).
 
-```
-    npm install
-```
+### 3. Rodando os Testes Automatizados
+Com o terminal do front-end aberto, você pode validar a integridade do código rodando:
+* `npm run test` (Executa os testes unitários e de renderização).
+* `npm run coverage` (Gera o relatório de cobertura de código do Vitest).
 
-3. **Rode o comando:**
-
-```
-    npm run dev
-```
-
-4. **Acesse no navegador:** O terminal exibirá um link local. Segure Ctrl (ou Cmd no Mac) e clique no link para abrir o sistema.
-
-5. **Estrutura principal da pasta:**
-```
+### 📁 Estrutura Principal da Pasta
+```text
 src/
 ├── components/
-│   ├── NavBar/         # Componente de navegação superior
-│   ├── SerieForm/      # Formulário de cadastro com validação
-│   └── SerieList/      # Componentes da lista (incluindo o SerieItem para edição in-line)
+│   ├── NavBar/
+│   │   └── index.jsx             # Componente de navegação superior
+│   ├── SerieForm/
+│   │   ├── index.jsx             # Formulário de cadastro e validação
+│   │   └── index.test.jsx        # Testes do formulário
+│   └── SerieList/
+│       ├── SerieItem.jsx         # Renderização de linha, edição (PUT), exclusão e API OMDb
+│       └── SerieItem.test.jsx    # Testes unitários do item
 ├── pages/
-│   ├── Home.jsx        # Página inicial
-│   ├── About.jsx       # Informações sobre o projeto (Sobre)
-│   ├── Cadastro.jsx    # Página que abriga o formulário
-│   └── List.jsx        # Página que exibe a lista e o campo de busca
-├── App.jsx             # Gerenciamento de rotas e estado global (Fonte da Verdade)
-└── index.css           # Estilização global
-```
+│   ├── About.jsx & .test.jsx     # Página Sobre e seus testes
+│   ├── Cadastro.jsx              # Página que abriga o formulário
+│   ├── Home.jsx & .test.jsx      # Página inicial de boas-vindas
+│   └── List.jsx & .test.jsx      # Página de listagem com filtro
+├── services/
+│   └── api.js                    # Configuração global do Axios
+├── App.css / index.css           # Estilização global e Dark Mode
+├── App.jsx                       # Gerenciamento de rotas (React Router DOM)
+└── main.jsx                      # Ponto de entrada (Entry point) da aplicação
